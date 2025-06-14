@@ -1,0 +1,19 @@
+I tried to write clean-modular and easily followable code.
+
+All the operations start from compress.m and decompress.m.
+The algorithm utilizes the functions under this directory, Utils.m, etc.
+
+We have the ones below, which have two functions Process(), Invert().
+    RLE.m
+    ZigZagScan.m
+    Quantization.m
+    DCT.m
+
+The part1.compression_ratio.m and part1_psnr.m uses the same functions
+to perform the task.
+
+
+For the constants, you can use Constants.m.
+
+
+You can just run the videoCreation.m to see the video.
