@@ -39,10 +39,6 @@ Restores frames using saved I-frames and reconstructed P-frames.
 
 🔁 Serialization & File Format
 Binary format:
-
-css
-Copy
-Edit
 -> NUMBER_OF_GOPS [int32]
    -> NUMBER_OF_FRAMES [int32]
       -> NUMBER_OF_BLOCKS [uint8]
