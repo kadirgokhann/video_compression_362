@@ -1,19 +1,99 @@
-I tried to write clean-modular and easily followable code.
+CMPE362 Video Compression Project
+Author: Kadir Gökhan Sezer
+ID: 2018400369
 
-All the operations start from compress.m and decompress.m.
-The algorithm utilizes the functions under this directory, Utils.m, etc.
+📦 Project Overview
+This project implements a basic and improved video compression pipeline in MATLAB. The approach involves frame-based encoding using I-frames and P-frames, with an extension to B-frames in the improved version. Key components include DCT, quantization, zigzag scanning, run-length encoding, and PSNR analysis.
 
-We have the ones below, which have two functions Process(), Invert().
-    RLE.m
-    ZigZagScan.m
-    Quantization.m
-    DCT.m
+📁 Deliverables
+Part 1: Simple Algorithm
+Encoding Pipeline
+ReadFramesUnprocessed:
 
-The part1.compression_ratio.m and part1_psnr.m uses the same functions
-to perform the task.
+Separates RGB channels and converts frames to double precision early to avoid processing issues.
 
+ConvertMacroBlocks:
 
-For the constants, you can use Constants.m.
+Divides frames into macroblocks (e.g., 8×8 blocks).
 
+Processing Steps:
 
-You can just run the videoCreation.m to see the video.
+DCT2: Applies 2D DCT to each macroblock.
+
+Quantization: Reduces DCT precision using quantization matrices.
+
+Zigzag Scan: Converts 2D blocks to 1D vectors.
+
+Run-Length Encoding (RLE): Compresses sequences of zeros efficiently.
+
+Frame Types:
+
+I-Frames: Fully encoded independently.
+
+P-Frames: Encoded based on differences from previous frames.
+
+Decoding Pipeline
+Performs the inverse of each encoding step: inverse RLE, zigzag, quantization, DCT2, and macroblock reassembly.
+
+Restores frames using saved I-frames and reconstructed P-frames.
+
+🔁 Serialization & File Format
+Binary format:
+
+css
+Copy
+Edit
+-> NUMBER_OF_GOPS [int32]
+   -> NUMBER_OF_FRAMES [int32]
+      -> NUMBER_OF_BLOCKS [uint8]
+         -> HEIGHT_BLOCK [uint8]
+         -> WIDTH_BLOCK [uint8]
+            -> BLOCK_VALUES [double]
+Correct header handling and block dimensions are essential.
+
+📊 Evaluation
+Compression Ratio (Simple Algorithm)
+Achieved effective compression, especially with small GOP sizes.
+
+Compression rate decreased as GOP size increased.
+
+Optimizations saved ~1 MB in final version.
+
+See chart on page 13 for visualized compression ratios.
+
+PSNR (Simple Algorithm)
+High PSNR values indicate I-frame locations.
+
+Quality degrades as distance from I-frame increases.
+
+GOP_SIZE = 1 gives best quality but no compression.
+
+Refer to graph on page 14 for PSNR analysis.
+
+🚀 Part 2: Improved Algorithm
+Introduced B-frames (bi-directional prediction) for potential compression improvements.
+
+Used official MPEG-1 quantization matrix:
+
+Multiplied by 1.2 for P-frames, 1.5 for B-frames.
+
+Final binary size = 6.9 MB (vs. 6.6 MB in Part 1).
+
+Matrix source: MPEG-1 Standard
+
+Challenges
+B-frame dependency on future frames caused loss of final frames.
+
+Compression fluctuated more than in the simple version.
+
+Suspected implementation issues limit effectiveness.
+
+Compression Ratio (Improved Algorithm)
+Chart on page 17 shows fluctuations and limited compression improvement.
+
+PSNR (Improved Algorithm)
+Similar trends to simple algorithm.
+
+Still shows best quality at I-frames, but results are noisier.
+
+Graph on page 18 visualizes PSNR per GOP size.
